@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\SearchController;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
@@ -17,6 +18,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/chats/{userId}', [ChatController::class, 'getChats']);
     Route::post('/chats', [ChatController::class, 'sendMessage']);
     Route::get('/chat-users', [ChatController::class, 'getChatUsers']);
+    Route::get('/search-users', [SearchController::class, 'search']);
     // Admin routes
     Route::middleware('admin')->prefix('admin')->group(function () {
         Route::post('add', [AdminController::class, 'addAdmin']);
