@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(SuperAdminSeeder::class);
+        // $this->call(SuperAdminSeeder::class);
         $users = User::factory()->count(50)->create();
 
         // Create Codes
