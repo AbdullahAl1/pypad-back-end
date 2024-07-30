@@ -149,7 +149,7 @@ class AuthController extends Controller
                 'user' => $user,
                 'role' => $user->role,
             ]
-        ]);
+        ])->header('Authorization', 'Bearer ' . $token); // Set token in the headers
     }
 
     public function logout()
@@ -163,4 +163,44 @@ class AuthController extends Controller
     {
         return response()->json(Auth::guard('api')->user());
     }
+
+    public function validateToken(Request $request)
+    {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            $token = JWTAuth::getToken();
+
+            // Optionally refresh the token if needed
+            $newToken = JWTAuth::refresh($token);
+
+            return response()->json([
+                'status' => 200,
+                'authorisation' => [
+                    'token' => $newToken,
+                    'type' => 'bearer',
+                ],
+                'data' => [
+                    'user' => $user,
+                    'role' => $user->role,
+                ]
+            ])->header('Authorization', 'Bearer ' . $newToken);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenBlacklistedException $e) {
+            return response()->json(['message' => 'Token is blacklisted'], 401);
+        } catch (JWTException $e) {
+            return response()->json(['message' => 'Token is invalid'], 401);
+        }
+    }
+
+    public function refresh()
+{
+    return response()->json([
+        'status' => 'success',
+        'user' => Auth::user(),
+        'authorisation' => [
+            'token' => Auth::refresh(),
+            'type' => 'bearer',
+        ]
+    ]);
+}
+
 }

@@ -19,7 +19,11 @@ class Authenticate extends Middleware
      */
     public function handle($request, Closure $next, ...$guards)
     {
-        $this->authenticate($request, $guards);
+        try {
+            $this->authenticate($request, $guards);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'unauthorized with exception'], 401);
+        }
 
         if (!Auth::check()) {
             return response()->json(['message' => 'unauthorized'], 401);
