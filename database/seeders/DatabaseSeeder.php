@@ -18,12 +18,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // $this->call(SuperAdminSeeder::class);
         $users = User::factory()->count(50)->create();
 
-        // Create Codes
         Code::factory()->count(100)->create();
-
-        // Create Friend Requests
         FriendRequest::factory()->count(50)->create();
 
         // Create Friends
@@ -40,7 +38,6 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Create Chats
         Chat::factory()->count(100)->create();
     }
 }
