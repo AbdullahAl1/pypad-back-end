@@ -24,6 +24,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('remove', [AdminController::class, 'removeAdmin']);
         Route::get('users', [AdminController::class, 'viewUsers']);
         Route::get('admins', [AdminController::class, 'viewAdmins']);
+        Route::post('user', [AdminController::class, 'addUser']);
     });
     Route::post('/codes', [CodeController::class, 'store']);
     Route::get('/codes', [CodeController::class, 'showAll']);
