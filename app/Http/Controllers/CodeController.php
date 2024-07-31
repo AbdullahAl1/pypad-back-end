@@ -46,7 +46,7 @@ class CodeController extends Controller
                 'string',
                 Rule::unique('codes')->where(function ($query) use ($user) {
                     return $query->where('user_id', $user->id);
-                })
+                })->ignore($id),
             ],
             'code' => 'required|string',
         ]);
