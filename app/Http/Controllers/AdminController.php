@@ -47,6 +47,40 @@ class AdminController extends Controller
         ], 201);
     }
 
+    public function addUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|unique:users',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $user = User::create([
+            'username' => $request->username,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'email_verified_at' => Carbon::now(), // Assuming admin verification is immediate
+        ]);
+
+
+        return response()->json([
+            'status' => 201,
+            'message' => 'user created successfully',
+            'data' => [
+                'user' => $user
+            ]
+        ], 201);
+    }
+
+
     public function removeAdmin(Request $request)
     {
         $validator = Validator::make($request->all(), [
