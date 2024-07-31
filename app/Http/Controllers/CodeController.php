@@ -38,8 +38,16 @@ class CodeController extends Controller
 
     public function update(Request $request, $id)
     {
+        $user = Auth::user();
         $request->validate([
-            'filename' => 'required|string',
+            'filename' => [
+                'required',
+                'max:255',
+                'string',
+                Rule::unique('codes')->where(function ($query) use ($user) {
+                    return $query->where('user_id', $user->id);
+                })
+            ],
             'code' => 'required|string',
         ]);
 
