@@ -161,7 +161,19 @@ class AuthController extends Controller
 
     public function me()
     {
-        return response()->json(Auth::guard('api')->user());
+        $user = Auth::guard('api')->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found', 'status' => 404], 404);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => [
+                'user' => $user,
+                'role' => $user->role,
+            ]
+        ]);
     }
 
     public function validateToken(Request $request)
